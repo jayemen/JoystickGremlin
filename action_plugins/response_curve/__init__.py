@@ -20,14 +20,15 @@ import enum
 import logging
 import os
 import time
-from PyQt5 import QtCore, QtGui, QtWidgets
 from xml.etree import ElementTree
 
+from PyQt5 import QtCore, QtGui, QtWidgets
+
 import gremlin
+import gremlin.ui.input_item
 from gremlin.base_classes import AbstractAction, AbstractFunctor
 from gremlin.common import InputType
 from gremlin.ui.common import DualSlider, DynamicDoubleSpinBox
-import gremlin.ui.input_item
 
 g_scene_size = 250.0
 
@@ -320,6 +321,53 @@ class AbstractCurveModel(QtCore.QObject):
         self._enforce_symmetry()
         self.symmetry_mode = mode
         self.content_added.emit()
+
+
+class LinearModel(AbstractCurveModel):
+    def __init__(self, profile_data):
+        super().__init__(profile_data)
+
+    def get_curve_function(self):
+        """Returns the curve function corresponding to the model.
+
+        :return curve function corresponding to the model
+        """
+        points = []
+
+        for cp in sorted(self._control_points, key=lambda e: e.center.x):
+            points.append((cp.center.x, cp.center.y))
+
+        return gremlin.spline.Linear(points)
+
+    def _init_from_profile_data(self):
+        """Initializes the control points based on profile data."""
+        for coord in self._profile_data.control_points:
+            self._control_points.append(
+                ControlPoint(self, Point2D(coord[0], coord[1]))
+            )
+
+    def is_valid_point(self, point, identifier=None):
+        """Checks is a point is valid in the model.
+
+        :param point the point to check for validity
+        :param identifier the identifier of a control point to ignore
+        :return True if valid, False otherwise
+        """
+        is_valid = True
+        for other in self._control_points:
+            if other.identifier == identifier:
+                continue
+            elif other.center.x == point.x:
+                is_valid = False
+        return is_valid
+
+    def save_to_profile(self):
+        """Ensures that the control point data is properly recorded in
+        the profile data."""
+        self._profile_data.mapping_type = "linear"
+        self._profile_data.control_points = []
+        for cp in self._control_points:
+            self._profile_data.control_points.append((cp.center.x, cp.center.y))
 
 
 class CubicSplineModel(AbstractCurveModel):
@@ -1095,6 +1143,8 @@ class ResponseCurveWidget(gremlin.ui.input_item.AbstractActionWidget):
             self.curve_model = CubicSplineModel(self.action_data)
         elif self.action_data.mapping_type == "cubic-bezier-spline":
             self.curve_model = CubicBezierSplineModel(self.action_data)
+        elif self.action_data.mapping_type == "linear":
+            self.curve_model = LinearModel(self.action_data)
         else:
             raise gremlin.error.ProfileError("Invalid curve type")
         # Graphical curve editor
@@ -1150,7 +1200,8 @@ class ResponseCurveWidget(gremlin.ui.input_item.AbstractActionWidget):
         """
         model_map = {
             "Cubic Spline": CubicSplineModel,
-            "Cubic Bezier Spline": CubicBezierSplineModel
+            "Cubic Bezier Spline": CubicBezierSplineModel,
+            "Linear": LinearModel,
         }
 
         # Create new model
@@ -1162,11 +1213,14 @@ class ResponseCurveWidget(gremlin.ui.input_item.AbstractActionWidget):
                 (-1.0, -1.0), (-0.8, -0.8), (0.8, 0.8), (1.0, 1.0)
             ]
             self.action_data.mapping_type = "cubic-bezier-spline"
+        elif curve_type == "Linear":
+            self.action_data.control_points = [(-1.0, -1.0), (1.0, 1.0)]
+            self.action_data.mapping_type = "linear"
 
         self.curve_model = model_map[curve_type](self.action_data)
 
         # Update curve settings UI
-        if self.action_data.mapping_type == "cubic-spline":
+        if self.action_data.mapping_type in ("cubic-spline", "linear")
             if self.handle_symmetry is not None:
                 self.handle_symmetry.hide()
                 self.handle_symmetry = None
@@ -1240,6 +1294,8 @@ class ResponseCurveFunctor(AbstractFunctor):
         elif action.mapping_type == "cubic-bezier-spline":
             self.response_fn = \
                 gremlin.spline.CubicBezierSpline(action.control_points)
+        elif action.mapping_type == "linear":
+            self.response_fn = gremlin.spline.Linear(action.control_points)
         else:
             raise gremlin.error.GremlinError("Invalid curve type")
 
@@ -1265,7 +1321,8 @@ class ResponseCurve(AbstractAction):
 
     curve_name_map = {
         "Cubic Spline": "cubic-spline",
-        "Cubic Bezier Spline": "cubic-bezier-spline"
+        "Cubic Bezier Spline": "cubic-bezier-spline",
+        "Linear": "linear"
     }
 
     def __init__(self, parent):

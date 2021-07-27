@@ -193,6 +193,8 @@ class Axis:
         elif spline_type == "cubic-bezier-spline":
             self._response_curve_fn = \
                 gremlin.spline.CubicBezierSpline(control_points)
+        elif spline_type == "linear":
+            self._response_curve_fn = gremlin.spline.Linear(control_points)
         else:
             logging.getLogger("system").error("Invalid spline type specified")
             self._response_curve_fn = lambda x: x

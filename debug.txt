@@ -1,0 +1,41 @@
+[2021-07-27 01:26:11.245] [debug] [info] Setting device change callback
+[2021-07-27 01:26:11.245] [debug] [info] Setting event callback
+[2021-07-27 01:26:11.370] [debug] [info] Initializing DILL v1.3
+[2021-07-27 01:26:11.460] [debug] [info] {2578F850-3AE8-11EA-8003-444553540000}: Processing device: vJoy Device
+[2021-07-27 01:26:11.465] [debug] [info] Device summary: vJoy Device {2578F850-3AE8-11EA-8003-444553540000}
+[2021-07-27 01:26:11.465] [debug] [info] Axis=8 Buttons=74 Hats=3
+[2021-07-27 01:26:11.465] [debug] [info] Axis map
+[2021-07-27 01:26:11.465] [debug] [info]   linear=1 id=1
+[2021-07-27 01:26:11.465] [debug] [info]   linear=2 id=2
+[2021-07-27 01:26:11.465] [debug] [info]   linear=3 id=3
+[2021-07-27 01:26:11.465] [debug] [info]   linear=4 id=4
+[2021-07-27 01:26:11.465] [debug] [info]   linear=5 id=5
+[2021-07-27 01:26:11.465] [debug] [info]   linear=6 id=6
+[2021-07-27 01:26:11.465] [debug] [info]   linear=7 id=7
+[2021-07-27 01:26:11.465] [debug] [info]   linear=8 id=8
+[2021-07-27 01:26:11.468] [debug] [info] {035AD800-E8B2-11EB-8003-444553540000}: Processing device: vJoy Device
+[2021-07-27 01:26:11.469] [debug] [info] Device summary: vJoy Device {035AD800-E8B2-11EB-8003-444553540000}
+[2021-07-27 01:26:11.469] [debug] [info] Axis=8 Buttons=32 Hats=3
+[2021-07-27 01:26:11.469] [debug] [info] Axis map
+[2021-07-27 01:26:11.469] [debug] [info]   linear=1 id=1
+[2021-07-27 01:26:11.469] [debug] [info]   linear=2 id=2
+[2021-07-27 01:26:11.469] [debug] [info]   linear=3 id=3
+[2021-07-27 01:26:11.469] [debug] [info]   linear=4 id=4
+[2021-07-27 01:26:11.469] [debug] [info]   linear=5 id=5
+[2021-07-27 01:26:11.469] [debug] [info]   linear=6 id=6
+[2021-07-27 01:26:11.469] [debug] [info]   linear=7 id=7
+[2021-07-27 01:26:11.469] [debug] [info]   linear=8 id=8
+[2021-07-27 01:26:11.518] [debug] [info] {E54EC1B0-E3E2-11EB-8001-444553540000}: Processing device:  VKBsim T-Rudder 
+[2021-07-27 01:26:11.519] [debug] [info] Device summary:  VKBsim T-Rudder  {E54EC1B0-E3E2-11EB-8001-444553540000}
+[2021-07-27 01:26:11.519] [debug] [info] Axis=3 Buttons=2 Hats=0
+[2021-07-27 01:26:11.519] [debug] [info] Axis map
+[2021-07-27 01:26:11.519] [debug] [info]   linear=1 id=4
+[2021-07-27 01:26:11.519] [debug] [info]   linear=2 id=5
+[2021-07-27 01:26:11.519] [debug] [info]   linear=3 id=6
+[2021-07-27 01:26:11.519] [debug] [info]   linear=0 id=0
+[2021-07-27 01:26:11.519] [debug] [info]   linear=0 id=0
+[2021-07-27 01:26:11.519] [debug] [info]   linear=0 id=0
+[2021-07-27 01:26:11.519] [debug] [info]   linear=0 id=0
+[2021-07-27 01:26:11.519] [debug] [info]   linear=0 id=0
+[2021-07-27 01:26:11.531] [debug] [error] {E54EC1B0-E3E2-11EB-8001-444553540000}: Attempted to read buffered device data from a device that is not buffered. (DIERR_NOTBUFFERED)
+[2021-07-27 01:26:11.531] [debug] [error] {E54EC1B0-E3E2-11EB-8001-444553540000} Failed reading device in buffered mode, falling back to polling, Attempted to read buffered device data from a device that is not buffered. (DIERR_NOTBUFFERED)

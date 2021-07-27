@@ -17,11 +17,39 @@
 
 
 import collections
-import gremlin.util
+import logging
 
+import gremlin.util
 
 # Named tuple to facilitate working with 2D coordinates
 Point2D = collections.namedtuple("Point2D", ["x", "y"])
+
+
+class Linear:
+    def __init__(self, points):
+        self.points = sorted(points, key=lambda x: x[0])
+
+    def __call__(self, x):
+        if x >= self.points[-1].x:
+            return self.points[-1].y
+
+        if x <= self.points[0].x:
+            return self.points[0].y
+
+        for i, point in enumerate(self.points):
+            nextp = self.points[i + 1]
+
+            if x < point.x or x > nextp.x:
+                continue
+
+            frac = (x - point.x) / (nextp.x - point.x)
+            return (nextp.y - point.y) * frac + point.y
+
+        logging.getLogger("system").error(
+            "cannot calculate linear point for x=%s", x
+        )
+
+        return 0.0
 
 
 class CubicSpline:
