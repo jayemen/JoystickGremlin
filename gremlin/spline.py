@@ -27,7 +27,8 @@ Point2D = collections.namedtuple("Point2D", ["x", "y"])
 
 class Linear:
     def __init__(self, points):
-        self.points = sorted(points, key=lambda x: x[0])
+        p2ds = [Point2D(x=point[0], y=point[1]) for point in points]
+        self.points = sorted(p2ds, key=lambda x: x[0])
 
     def __call__(self, x):
         if x >= self.points[-1].x:

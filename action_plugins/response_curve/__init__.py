@@ -369,6 +369,15 @@ class LinearModel(AbstractCurveModel):
         for cp in self._control_points:
             self._profile_data.control_points.append((cp.center.x, cp.center.y))
 
+    def _create_control_point(self, point, handles=()):
+        """Adds a new control point to the model.
+
+        :param point the center of the control point
+        :param handles list of potential handles
+        :return the newly created control point
+        """
+        return ControlPoint(self, point)
+
 
 class CubicSplineModel(AbstractCurveModel):
 
@@ -1109,6 +1118,7 @@ class ResponseCurveWidget(gremlin.ui.input_item.AbstractActionWidget):
         self.curve_type_selection = QtWidgets.QComboBox()
         self.curve_type_selection.addItem("Cubic Spline")
         self.curve_type_selection.addItem("Cubic Bezier Spline")
+        self.curve_type_selection.addItem("Linear")
         self.curve_type_selection.currentTextChanged.connect(
             self._change_curve_type
         )
@@ -1220,7 +1230,7 @@ class ResponseCurveWidget(gremlin.ui.input_item.AbstractActionWidget):
         self.curve_model = model_map[curve_type](self.action_data)
 
         # Update curve settings UI
-        if self.action_data.mapping_type in ("cubic-spline", "linear")
+        if self.action_data.mapping_type in ("cubic-spline", "linear"):
             if self.handle_symmetry is not None:
                 self.handle_symmetry.hide()
                 self.handle_symmetry = None

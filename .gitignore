@@ -1,6 +1,7 @@
 *.sw[op]
 *.pyc
 *.wxs
+debug.txt
 
 .idea
 __pycache__
