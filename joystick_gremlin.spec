@@ -33,7 +33,7 @@ added_binaries = [
 
 a = Analysis(
     ["joystick_gremlin.py"],
-    pathex=['C:\\Users\\Ivan Dolvich\\PycharmProjects\\JoystickGremlin'],
+    pathex=[r'D:\code\JoystickGremlin'],
     binaries=added_binaries,
     datas=added_files,
     hiddenimports=[],
