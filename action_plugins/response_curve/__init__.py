@@ -353,13 +353,12 @@ class LinearModel(AbstractCurveModel):
         :param identifier the identifier of a control point to ignore
         :return True if valid, False otherwise
         """
-        is_valid = True
         for other in self._control_points:
-            if other.identifier == identifier:
-                continue
-            elif other.center.x == point.x:
-                is_valid = False
-        return is_valid
+            if other.identifier != identifier and other.center.x == point.x:
+                return False
+
+        return True
+
 
     def save_to_profile(self):
         """Ensures that the control point data is properly recorded in
