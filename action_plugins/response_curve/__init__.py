@@ -34,7 +34,6 @@ g_scene_size = 250.0
 
 
 class SymmetryMode(enum.Enum):
-
     """Symmetry modes for response curves."""
 
     NoSymmetry = 1
@@ -42,7 +41,6 @@ class SymmetryMode(enum.Enum):
 
 
 class Point2D:
-
     """Represents a 2D point with support for addition and subtraction."""
 
     def __init__(self, x=0.0, y=0.0):
@@ -65,7 +63,6 @@ class Point2D:
 
 
 class ControlPoint:
-
     """Represents a single control point in a response curve.
 
     Each control point has at least a center point but can possibly have
@@ -171,7 +168,6 @@ class ControlPoint:
 
 
 class AbstractCurveModel(QtCore.QObject):
-
     """Abstract base class for all  curve models."""
 
     # Signal emitted when model data changes
@@ -359,7 +355,6 @@ class LinearModel(AbstractCurveModel):
 
         return True
 
-
     def save_to_profile(self):
         """Ensures that the control point data is properly recorded in
         the profile data."""
@@ -379,7 +374,6 @@ class LinearModel(AbstractCurveModel):
 
 
 class CubicSplineModel(AbstractCurveModel):
-
     """Represents a simple cubic spline model."""
 
     def __init__(self, profile_data):
@@ -440,7 +434,6 @@ class CubicSplineModel(AbstractCurveModel):
 
 
 class CubicBezierSplineModel(AbstractCurveModel):
-
     """Represents a cubic bezier spline model."""
 
     def __init__(self, profile_data):
@@ -530,14 +523,14 @@ class CubicBezierSplineModel(AbstractCurveModel):
             )
         )
 
-        for i in range(3, len(coordinates)-3, 3):
+        for i in range(3, len(coordinates) - 3, 3):
             self._control_points.append(
                 ControlPoint(
                     self,
                     Point2D(coordinates[i][0], coordinates[i][1]),
                     [
-                        Point2D(coordinates[i-1][0], coordinates[i-1][1]),
-                        Point2D(coordinates[i+1][0], coordinates[i+1][1])
+                        Point2D(coordinates[i - 1][0], coordinates[i - 1][1]),
+                        Point2D(coordinates[i + 1][0], coordinates[i + 1][1])
                     ]
                 )
             )
@@ -584,7 +577,6 @@ class CubicBezierSplineModel(AbstractCurveModel):
 
 
 class ControlPointGraphicsItem(QtWidgets.QGraphicsEllipseItem):
-
     """UI Item representing the center of a control point."""
 
     def __init__(self, control_point, parent=None):
@@ -594,7 +586,7 @@ class ControlPointGraphicsItem(QtWidgets.QGraphicsEllipseItem):
         :param parent the parent of this widget
         """
         super().__init__(-4, -4, 8, 8, parent)
-        assert(isinstance(control_point, ControlPoint))
+        assert (isinstance(control_point, ControlPoint))
 
         self.control_point = control_point
 
@@ -663,7 +655,6 @@ class ControlPointGraphicsItem(QtWidgets.QGraphicsEllipseItem):
 
 
 class CurveHandleGraphicsItem(QtWidgets.QGraphicsRectItem):
-
     """UI Item representing a handle of a control point."""
 
     def __init__(self, index, point, parent):
@@ -688,8 +679,8 @@ class CurveHandleGraphicsItem(QtWidgets.QGraphicsRectItem):
         point = self.parent.control_point.handles[self.index]
         delta = point - center
 
-        self.setPos(delta.x*g_scene_size, -delta.y*g_scene_size)
-        self.line.setLine(delta.x*g_scene_size, -delta.y*g_scene_size, 0, 0)
+        self.setPos(delta.x * g_scene_size, -delta.y * g_scene_size)
+        self.line.setLine(delta.x * g_scene_size, -delta.y * g_scene_size, 0, 0)
 
     def set_active(self, is_active):
         """Handles changing the selected state of an item
@@ -731,7 +722,6 @@ class CurveHandleGraphicsItem(QtWidgets.QGraphicsRectItem):
 
 
 class CurveView(QtWidgets.QGraphicsScene):
-
     """Visualization of the entire curve editor UI element."""
 
     def __init__(self, curve_model, point_editor, parent=None):
@@ -835,9 +825,9 @@ class CurveView(QtWidgets.QGraphicsScene):
         curve_fn = self.model.get_curve_function()
         if curve_fn:
             path = QtGui.QPainterPath(
-                QtCore.QPointF(-g_scene_size, -g_scene_size*curve_fn(-1))
+                QtCore.QPointF(-g_scene_size, -g_scene_size * curve_fn(-1))
             )
-            for x in range(-int(g_scene_size), int(g_scene_size+1), 2):
+            for x in range(-int(g_scene_size), int(g_scene_size + 1), 2):
                 path.lineTo(x, -g_scene_size * curve_fn(x / g_scene_size))
             self.addPath(path, QtGui.QPen(QtGui.QColor(0, 200, 0)))
 
@@ -901,7 +891,6 @@ class CurveView(QtWidgets.QGraphicsScene):
 
 
 class ControlPointEditorWidget(QtWidgets.QWidget):
-
     """Widgets allowing the control point coordinates to be changed
     via text fields."""
 
@@ -946,7 +935,6 @@ class ControlPointEditorWidget(QtWidgets.QWidget):
 
 
 class DeadzoneWidget(QtWidgets.QWidget):
-
     """Widget visualizing deadzone settings as well as allowing the
     modification of these."""
 
@@ -988,7 +976,7 @@ class DeadzoneWidget(QtWidgets.QWidget):
         self.right_upper.setMinimum(0.0)
         self.right_upper.setMaximum(1.0)
 
-        self._normalizer =\
+        self._normalizer = \
             self.left_slider.range()[1] - self.left_slider.range()[0]
 
         # Hook up all the required callbacks
@@ -1096,7 +1084,6 @@ class DeadzoneWidget(QtWidgets.QWidget):
 
 
 class ResponseCurveWidget(gremlin.ui.input_item.AbstractActionWidget):
-
     """Widget that allows configuring the response of an axis to
     user inputs."""
 
@@ -1275,8 +1262,8 @@ class ResponseCurveWidget(gremlin.ui.input_item.AbstractActionWidget):
         self.curve_view.setSceneRect(QtCore.QRectF(
             -g_scene_size,
             -g_scene_size,
-            2*g_scene_size,
-            2*g_scene_size
+            2 * g_scene_size,
+            2 * g_scene_size
         ))
         gremlin.ui.common.clear_layout(self.curve_view_layout)
         self.curve_view_layout.addStretch()
@@ -1314,7 +1301,6 @@ class ResponseCurveFunctor(AbstractFunctor):
 
 
 class ResponseCurve(AbstractAction):
-
     """Represents axis response curve mapping."""
 
     name = "Response Curve"
